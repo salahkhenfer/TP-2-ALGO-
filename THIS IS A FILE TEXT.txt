@@ -1,0 +1,5 @@
+the difference between "quickSort" and "quickSort randomly" .
+"quickSort" = this is a chose a pivot in the last or end .
+"quickSort randomly" = this is a chose a pivot in the list random . 
+ 
+so  the time Execution of  quickSort randomly a more than  quickSort .
