@@ -149,67 +149,67 @@ void swap(int *a, int *b)
     *b = t;
 }
 
-// QUICK SORT
+// // QUICK SORT
 
-// THIS FOUNCTION GET LAST NODE IN THE LIST IN THE RIGHT
+// // THIS FOUNCTION GET LAST NODE IN THE LIST IN THE RIGHT
 struct Node *lastNode(struct Node *LAST)
 {
     while (LAST && LAST->next)
         LAST = LAST->next;
     return LAST;
 }
-// GIT A PIVOT IN THE LIST
-struct Node *pivot(struct Node *head, struct Node *last)
-{
-    struct Node *base = head;
-    struct Node *Front = head;
-    int n = 0;
+// // GIT A PIVOT IN THE LIST
+// struct Node *pivot(struct Node *head, struct Node *last)
+// {
+//     struct Node *base = head;
+//     struct Node *Front = head;
+//     int n = 0;
 
-    while (Front != NULL && Front != last)
-    {
-        if (Front->data < last->data)
-        {
-            base = head;
-            // swap(&(head->data), &(Front->data));
-            n = head->data;
-            head->data = Front->data;
-            Front->data = n;
-            head = head->next;
-        }
-        Front = Front->next;
-    }
-    // swap(&(head->data), &(last->data));
-    n = head->data;
-    head->data = last->data;
-    last->data = n;
-    return base;
-}
-void callquickSort(struct Node *head, struct Node *last)
-{
+//     while (Front != NULL && Front != last)
+//     {
+//         if (Front->data < last->data)
+//         {
+//             base = head;
+//             // swap(&(head->data), &(Front->data));
+//             n = head->data;
+//             head->data = Front->data;
+//             Front->data = n;
+//             head = head->next;
+//         }
+//         Front = Front->next;
+//     }
+//     // swap(&(head->data), &(last->data));
+//     n = head->data;
+//     head->data = last->data;
+//     last->data = n;
+//     return base;
+// }
+// void callquickSort(struct Node *head, struct Node *last)
+// {
 
-    if (head == last)
-    {
-        return 0;
-    }
-    // struct Node *base = pivot(head, last);
-    struct Node *base = pivot(head, last);
-    if (base != NULL && base->next != NULL)
-    {
-        callquickSort(base->next, last);
-    }
-    if (base != NULL && head != NULL)
-    {
-        callquickSort(head, base);
-    }
-}
+//     if (head == last)
+//     {
+//         return 0;
+//     }
+//     // struct Node *base = pivot(head, last);
+//     struct Node *base = pivot(head, last);
+//     if (base != NULL && base->next != NULL)
+//     {
+//         callquickSort(base->next, last);
+//     }
+//     if (base != NULL && head != NULL)
+//     {
+//         callquickSort(head, base);
+//     }
+// }
 
-// THIS IS TIKE A FIRTST ELEMENT AND LAST IN THE LIST
-void quickSort()
-{
-    struct Node *h = lastNode(head);
+// // THIS IS TIKE A FIRTST ELEMENT AND LAST IN THE LIST
+// void quickSort()
+// {
+//     struct Node *h = lastNode(head);
 
-    callquickSort(head, h);
-}
+//     callquickSort(head, h);
+// }
 // THIS IS FILL THE LIST IN THE N FALUE
 void Fill(int N)
 {
@@ -232,36 +232,59 @@ void FillRandiom(int n)
         insert(x);
     }
 }
-// GET THE LANGHT OF LIST
-int LongList(struct Node *high, struct Node *low)
-{
-    struct Node *temp = head;
-    int longoflist = 0;
-    if (temp != NULL)
-    {
-        while (temp != low)
-        {
-            longoflist++;
-            temp = temp->next;
-        }
-    }
-    return longoflist;
-}
 
+
+// quickSort RANDOM
 // THIS IS TAKE A PIVOT RANDOMLY
 
-struct Node *Randpivot(struct Node *high, struct Node *low)
+struct Node *getRandomPivot(struct Node *start, struct Node *end)
 {
-    int k, n, i = 0;
-    if (high == low)
-        return low;
-    n = LongList(high, low);
-    struct Node *piv = high;
-    k = rand() % n;
-    for (i = 0; i < k - 1; i++)
+    int count = 0;
+    struct Node *p = start;
+    while (p != end)
     {
-        piv = piv->next;
+        count++;
+        p = p->next;
     }
-    return piv;
+    int pivotIndex = rand() % count;
+    p = start;
+    while (pivotIndex--)
+    {
+        p = p->next;
+    }
+    return p;
 }
 
+struct Node *partition(struct Node *start, struct Node *end)
+{
+    struct Node *pivot = getRandomPivot(start, end);
+    int pivotValue = pivot->data;
+    struct Node *i = start->prev;
+    struct Node *j = start;
+    while (j != end)
+    {
+        if (j->data <= pivotValue)
+        {
+            i = (i == NULL) ? start : i->next;
+            int temp = i->data;
+            i->data = j->data;
+            j->data = temp;
+        }
+        j = j->next;
+    }
+    i = (i == NULL) ? start : i->next;
+    int temp = i->data;
+    i->data = pivot->data;
+    pivot->data = temp;
+    return i;
+}
+
+void quickSort(struct Node *start, struct Node *end)
+{
+    if (end != NULL && start != end && start != end->next)
+    {
+        struct Node *p = partition(start, end);
+        quickSort(start, p->prev);
+        quickSort(p->next, end);
+    }
+}
