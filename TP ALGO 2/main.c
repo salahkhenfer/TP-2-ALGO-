@@ -31,7 +31,7 @@ int main()
         printf("\n *    11. Quit                             *\n");
 
         printf("\n ******************************************\n");
-        printf("\n Choose an option [1-5] : ");
+        printf("\n Choose an option [1-11] : ");
         scanf("%d", &option);
         switch (option)
         {
